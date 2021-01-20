@@ -67,9 +67,9 @@ public class FlinkIcebergHadoopSink {
     PartitionSpec spec = PartitionSpec.unpartitioned();
 
     // table path
-    String basePath = "hdfs://itserver21:8020/flink";
+    String basePath = "hdfs://itserver21:8020/flink/";
 
-    String tablePath = basePath.concat("demo" + System.currentTimeMillis());
+    String tablePath = basePath.concat("demo20210120");
 
     // property settings, format as orc or parquet
     Map<String, String> props =

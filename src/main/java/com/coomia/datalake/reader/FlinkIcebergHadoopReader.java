@@ -28,13 +28,13 @@ public class FlinkIcebergHadoopReader {
     env.getConfig().setAutoWatermarkInterval(5000L);
     env.setParallelism(1);
 
-    String warehouse = "hdfs://itserver21:8020/warehouse/iceberg/";
+    String warehouse = "hdfs://itserver21:8020/flink/";
 
     // load table.
     Configuration conf = new Configuration();
     HadoopCatalog catalog = new HadoopCatalog(conf, warehouse);
 
-    Table table = catalog.loadTable(TableIdentifier.of("demo1611036955409"));
+    Table table = catalog.loadTable(TableIdentifier.of("demo20210120"));
     TableLoader tableLoader = TableLoader.fromHadoopTable(table.location());
 
     FlinkSource.forRowData().env(env).tableLoader(tableLoader).table(table).build()

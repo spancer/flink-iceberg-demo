@@ -49,7 +49,7 @@
               </filters>
               <transformers>
                 <transformer>
-                  <mainClass>com.coomia.datalake.writer.FlinkSQLIcebergHadoopWriter</mainClass>
+                  <mainClass>com.coomia.datalake.writer.FlinkIcebergHadoopSink</mainClass>
                 </transformer>
               </transformers>
             </configuration>

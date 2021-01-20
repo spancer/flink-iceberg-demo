@@ -36,7 +36,7 @@ public class FlinkSQLIcebergHadoopReader {
 
   public static void main(String[] args) throws Exception {
 
-    String warehouse = "hdfs://itserver21:8020/warehouse/iceberg/demo1611026768511";
+    String warehouse = "hdfs://itserver21:8020/flink";
 
     System.setProperty("HADOOP_USER_NAME", "hdfs");
 
@@ -44,12 +44,12 @@ public class FlinkSQLIcebergHadoopReader {
         .build();
     TableEnvironment tenv = TableEnvironment.create(settings);
     String createIcebergCatalog =
-        "CREATE CATALOG iceberg WITH ( 'type'='iceberg', 'catalog-type'='hadoop', 'clients'='5', 'property-version'='1', 'warehouse'='hdfs://itserver21:8020/warehouse/iceberg')";
+        "CREATE CATALOG iceberg WITH ( 'type'='iceberg', 'catalog-type'='hadoop', 'clients'='5', 'property-version'='1', 'warehouse'='hdfs://itserver21:8020/flink')";
     tenv.executeSql(createIcebergCatalog);
     tenv.executeSql("show catalogs").print();
     tenv.useCatalog("iceberg");
     tenv.executeSql("show tables").print();
-    tenv.useDatabase("demo1611026768511");
+    tenv.useDatabase("demo20210120");
     tenv.executeSql("show tables").print();
     tenv.executeSql("select * from demo1611026768511 limit 10 ").print();
 
