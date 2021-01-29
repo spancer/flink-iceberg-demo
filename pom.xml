@@ -12,7 +12,7 @@
 		<hive.version>3.1.2</hive.version>
 		<hadoop.version>3.2.1</hadoop.version>
 		<iceberg.version>0.10.0</iceberg.version>
-		<kafka.version>2.4.1</kafka.version>
+		<kafka.version>2.5.0</kafka.version>
 		<scala.binary.version>2.12</scala.binary.version>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
@@ -231,13 +231,6 @@
 				<version>1.2.17</version>
 				<scope>runtime</scope>
 			</dependency>
-			
-			<!-- flink kafka -->
-			<dependency>
-				<groupId>org.apache.flink</groupId>
-				<artifactId>flink-connector-kafka_${scala.binary.version}</artifactId>
-				<version>${flink.version}</version>
-			</dependency>
 
 			<!-- kafka client -->
 
@@ -245,6 +238,12 @@
 				<groupId>org.apache.kafka</groupId>
 				<artifactId>kafka-clients</artifactId>
 				<version>${kafka.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.projectlombok</groupId>
+				<artifactId>lombok</artifactId>
+				<version>1.18.8</version>
 			</dependency>
 
 		</dependencies>
@@ -277,27 +276,74 @@
 
 	</dependencies>
 	<build>
+		<pluginManagement>
+			<plugins>
+				<!-- Java Compiler -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.1</version>
+					<configuration>
+						<source>${maven.compiler.source}</source>
+						<target>${maven.compiler.target}</target>
+						<useIncrementalCompilation>false</useIncrementalCompilation>
+						<compilerArgs>
+							<!-- Prevents recompilation due to missing package-info.class, see 
+								MCOMPILER-205 -->
+							<arg>-Xpkginfo:always</arg>
+						</compilerArgs>
+					</configuration>
+				</plugin>
+
+				<!-- This improves the out-of-the-box experience in Eclipse by resolving 
+					some warnings. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-shade-plugin</artifactId>
+										<versionRange>[3.1.1,)</versionRange>
+										<goals>
+											<goal>shade</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-compiler-plugin</artifactId>
+										<versionRange>[3.1,)</versionRange>
+										<goals>
+											<goal>testCompile</goal>
+											<goal>compile</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-					<!-- The semantics of this option are reversed, see MCOMPILER-209. -->
-					<useIncrementalCompilation>false</useIncrementalCompilation>
-					<compilerArgs>
-						<!-- Prevents recompilation due to missing package-info.class, see 
-							MCOMPILER-205 -->
-						<arg>-Xpkginfo:always</arg>
-					</compilerArgs>
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
 
 
 	<modules>
 		<module>flink-hive-test</module>
+		<module>flink-kafka-test</module>
 	</modules>
 </project>
