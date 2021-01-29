@@ -42,7 +42,7 @@
               </filters>
               <transformers>
                 <transformer>
-                  <mainClass>com.coomia.datalake.kafka.FlinkKafkaDemo</mainClass>
+                  <mainClass>com.coomia.datalake.kafka.FlinkKafkaProduceDemo</mainClass>
                 </transformer>
               </transformers>
             </configuration>

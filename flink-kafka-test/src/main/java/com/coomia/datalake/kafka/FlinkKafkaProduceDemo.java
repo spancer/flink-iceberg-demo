@@ -9,7 +9,7 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer.Semantic;
 
-public class FlinkKafkaDemo {
+public class FlinkKafkaProduceDemo {
 
   public static void main(String[] args) throws Exception {
 
