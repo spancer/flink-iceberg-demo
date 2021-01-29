@@ -35,7 +35,7 @@ public class FlinkSQLHiveWriter {
     tableEnv.executeSql(sql).print();
 
     String sinkTable = "event_sink_" + mill;
-    // 设置为hive, 利用hive语法建表
+    // hive supported sql dialect, so as to query in hive client.
     tableEnv.getConfig().setSqlDialect(SqlDialect.HIVE);
     tableEnv.executeSql("CREATE TABLE " + sinkTable
         + " (uid STRING,    eventid STRING,    uuid STRING,    eventTime BIGINT,proctime BIGINT) PARTITIONED BY (dt STRING, hr STRING) STORED AS ORC TBLPROPERTIES (  'partition.time-extractor.timestamp-pattern'='$dt $hr:00:00',  'sink.partition-commit.trigger'='partition-time',  'sink.partition-commit.delay'='1 min',  'sink.partition-commit.policy.kind'='metastore,success-file')");

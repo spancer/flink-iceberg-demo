@@ -92,6 +92,12 @@
 			<groupId>org.apache.flink</groupId>
 			<artifactId>flink-connector-jdbc_${scala.binary.version}</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>org.apache.iceberg</groupId>
+			<artifactId>iceberg-flink</artifactId>
+		</dependency>
+
 	</dependencies>
 	<build>
 		<plugins>

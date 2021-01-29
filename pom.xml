@@ -8,10 +8,11 @@
 	<packaging>pom</packaging>
 	<description>flink iceberg integration tests.</description>
 	<properties>
-		<flink.version>1.11.1</flink.version>
-		<hive.version>3.1.1</hive.version>
-		<hadoop.version>3.1.1</hadoop.version>
+		<flink.version>1.11.3</flink.version>
+		<hive.version>3.1.2</hive.version>
+		<hadoop.version>3.2.1</hadoop.version>
 		<iceberg.version>0.10.0</iceberg.version>
+		<kafka.version>2.4.1</kafka.version>
 		<scala.binary.version>2.12</scala.binary.version>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
@@ -229,6 +230,21 @@
 				<artifactId>log4j</artifactId>
 				<version>1.2.17</version>
 				<scope>runtime</scope>
+			</dependency>
+			
+			<!-- flink kafka -->
+			<dependency>
+				<groupId>org.apache.flink</groupId>
+				<artifactId>flink-connector-kafka_${scala.binary.version}</artifactId>
+				<version>${flink.version}</version>
+			</dependency>
+
+			<!-- kafka client -->
+
+			<dependency>
+				<groupId>org.apache.kafka</groupId>
+				<artifactId>kafka-clients</artifactId>
+				<version>${kafka.version}</version>
 			</dependency>
 
 		</dependencies>
