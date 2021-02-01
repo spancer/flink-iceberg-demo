@@ -16,7 +16,7 @@ import org.apache.iceberg.catalog.Catalog;
 import org.apache.iceberg.catalog.TableIdentifier;
 import org.apache.iceberg.flink.TableLoader;
 import org.apache.iceberg.flink.sink.FlinkSink;
-import org.apache.iceberg.hive.HiveCatalog;
+import org.apache.iceberg.hadoop.HadoopCatalog;
 import org.apache.iceberg.types.Types;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -33,7 +33,7 @@ public class FlinkWriteIcebergTest {
 
     // iceberg catalog identification.
     Configuration conf = new Configuration();
-    Catalog catalog = new HiveCatalog(conf);
+    Catalog catalog = new HadoopCatalog(conf);
 
     // iceberg table identification.
     TableIdentifier name = TableIdentifier.of("default", "iceberg-tb");
