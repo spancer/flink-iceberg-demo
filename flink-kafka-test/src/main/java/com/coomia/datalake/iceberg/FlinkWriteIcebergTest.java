@@ -40,12 +40,14 @@ public class FlinkWriteIcebergTest {
 
     // iceberg table schema identification.
     Schema schema = new Schema(Types.NestedField.required(1, "uid", Types.StringType.get()),
-        Types.NestedField.optional(2, "eventTime", Types.LongType.get()),
+        Types.NestedField.required(2, "eventTime", Types.LongType.get()),
         Types.NestedField.required(3, "eventid", Types.StringType.get()),
         Types.NestedField.optional(4, "uuid", Types.StringType.get()));
+    Types.NestedField.required(5, "ts", Types.TimestampType.withoutZone());
+
 
     // iceberg table partition identification.
-    PartitionSpec spec = PartitionSpec.builderFor(schema).year("ts").bucket("id", 2).build();
+    PartitionSpec spec = PartitionSpec.builderFor(schema).year("ts").bucket("uid", 5).build();
 
     // create an iceberg table.
     Table table = catalog.createTable(name, schema, spec);
@@ -70,6 +72,7 @@ public class FlinkWriteIcebergTest {
             row.setField(1, dataJson.getLong("eventTime"));
             row.setField(2, dataJson.getString("eventid"));
             row.setField(3, dataJson.getString("uuid"));
+            row.setField(4, dataJson.getLong("eventTime") * 1000); // milliseconds to microseconds
             return row;
           }
 
@@ -80,7 +83,7 @@ public class FlinkWriteIcebergTest {
 
     TableLoader tableLoader = TableLoader.fromHadoopTable(table.location());
 
-    //sink data to iceberg table
+    // sink data to iceberg table
     FlinkSink.forRowData(dataStream).table(table).tableLoader(tableLoader).writeParallelism(1)
         .build();
 
