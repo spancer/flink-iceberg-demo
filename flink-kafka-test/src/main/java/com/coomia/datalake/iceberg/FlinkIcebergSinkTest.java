@@ -59,8 +59,8 @@ public class FlinkIcebergSinkTest {
       @Override
       public void run(SourceContext<RowData> ctx) throws Exception {
         while (flag) {
-          GenericRowData row = new GenericRowData(3);
-          row.setField(0, System.currentTimeMillis());
+          GenericRowData row = new GenericRowData(4);
+          row.setField(0, new Random().nextInt(1000000000));
           row.setField(1, UUID.randomUUID().toString());
           row.setField(2, new Random().nextInt(100));
           ctx.collect(row);
