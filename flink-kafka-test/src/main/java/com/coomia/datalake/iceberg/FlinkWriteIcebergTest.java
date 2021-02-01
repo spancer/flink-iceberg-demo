@@ -43,11 +43,11 @@ public class FlinkWriteIcebergTest {
         Types.NestedField.required(2, "eventTime", Types.LongType.get()),
         Types.NestedField.required(3, "eventid", Types.StringType.get()),
         Types.NestedField.optional(4, "uuid", Types.StringType.get()));
-    Types.NestedField.required(5, "ts", Types.TimestampType.withoutZone());
+        Types.NestedField.required(5, "ts", Types.TimestampType.withoutZone());
 
 
     // iceberg table partition identification.
-    PartitionSpec spec = PartitionSpec.builderFor(schema).year("ts").bucket("uid", 5).build();
+    PartitionSpec spec = PartitionSpec.builderFor(schema).bucket("uid", 5).build();
 
     // create an iceberg table.
     Table table = catalog.createTable(name, schema, spec);
