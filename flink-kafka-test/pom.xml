@@ -159,7 +159,7 @@
 							<transformers>
 								<transformer
 									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-									<mainClass>com.coomia.datalake.iceberg.FlinkWriteIcebergTest</mainClass>
+									<mainClass>com.coomia.datalake.iceberg.FlinkReadIcebergTest</mainClass>
 								</transformer>
 							</transformers>
 						</configuration>

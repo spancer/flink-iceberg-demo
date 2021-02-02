@@ -60,11 +60,12 @@ public class FlinkWriteIcebergTest {
     // identify using orc format as storage.
     Map<String, String> props =
         ImmutableMap.of(TableProperties.DEFAULT_FILE_FORMAT, FileFormat.ORC.name());
-
-    // create an iceberg table.
-    Table table = catalog.createTable(name, schema, spec, props);
-
-
+    Table table = null;
+    // create an iceberg table if not exists, otherwise, load it.
+    if (!catalog.tableExists(name))
+      table = catalog.createTable(name, schema, spec, props);
+    else
+      table = catalog.loadTable(name);
 
     String topic = "arkevent";
     String servers = "kafka:9092";

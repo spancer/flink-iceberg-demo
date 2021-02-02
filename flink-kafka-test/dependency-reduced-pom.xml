@@ -42,7 +42,7 @@
               </filters>
               <transformers>
                 <transformer>
-                  <mainClass>com.coomia.datalake.iceberg.FlinkWriteIcebergTest</mainClass>
+                  <mainClass>com.coomia.datalake.iceberg.FlinkReadIcebergTest</mainClass>
                 </transformer>
               </transformers>
             </configuration>
