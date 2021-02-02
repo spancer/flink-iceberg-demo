@@ -22,7 +22,7 @@ public class FlinkReadIcebergTest {
     StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
     env.getConfig().setGlobalJobParameters(params);
 
-    String tableNameString = "iceberg-tb";
+    String tableNameString = "iceberg-tb-1612252540237";
     if (params.has("table"))
       tableNameString = params.get("table");
     TableLoader tableLoader = TableLoader
