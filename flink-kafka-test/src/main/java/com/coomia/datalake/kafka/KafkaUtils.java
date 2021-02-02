@@ -47,7 +47,7 @@ public class KafkaUtils {
      */
     props.put("retries", 1);
     
-    props.put("transaction.max.timeout.ms", 10*1000*60);//10mins
+    props.put("transaction.max.timeout.ms", 5*1000*60);//5mins
     /**
      * Producer批量发送同一个partition消息以减少请求的数量从而提升客户端和服务端的性能，默认大小是16348 byte(16k).
      * 发送到broker的请求可以包含多个batch, 每个batch的数据属于同一个partition，太小的batch会降低吞吐.太大会浪费内存.

@@ -13,14 +13,18 @@ import com.alibaba.fastjson.JSON;
 public class EventSourceGenerator extends RichParallelSourceFunction<String> {
 
   private static final long serialVersionUID = -3345711794203267205L;
-  private int dpv = 100000000;
+  private long dpv = 1-000-000-000;
   private int maxUid;
 
   /**
    * 
    */
-  public EventSourceGenerator(int dpv, int maxUid) {
+  public EventSourceGenerator(long dpv, int maxUid) {
     this.dpv = dpv;
+    this.maxUid = maxUid;
+  }
+  
+  public EventSourceGenerator(int maxUid) {
     this.maxUid = maxUid;
   }
 

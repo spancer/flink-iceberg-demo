@@ -19,7 +19,7 @@ public class FlinkKafkaProduceDemo {
     // produce some data to kafka
     String topic = "arkevent";
     String servers = "kafka:9092";
-    DataStream<String> producer = env.addSource(new EventSourceGenerator(10000, 1000));
+    DataStream<String> producer = env.addSource(new EventSourceGenerator(10000));
     producer
         .addSink(new FlinkKafkaProducer<String>(topic, new ProducerStringSerializationSchema(topic),
             KafkaUtils.producerProps(servers), Semantic.EXACTLY_ONCE));
