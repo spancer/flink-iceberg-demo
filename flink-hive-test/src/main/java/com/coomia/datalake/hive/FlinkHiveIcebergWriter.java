@@ -1,6 +1,6 @@
 package com.coomia.datalake.hive;
 
-import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -8,7 +8,8 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.source.SourceFunction;
 import org.apache.flink.table.data.GenericRowData;
 import org.apache.flink.table.data.RowData;
-import org.apache.flink.types.Row;
+import org.apache.flink.table.data.StringData;
+import org.apache.flink.table.data.TimestampData;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.iceberg.PartitionSpec;
 import org.apache.iceberg.Schema;
@@ -19,13 +20,12 @@ import org.apache.iceberg.flink.TableLoader;
 import org.apache.iceberg.flink.sink.FlinkSink;
 import org.apache.iceberg.hive.HiveCatalog;
 import org.apache.iceberg.types.Types;
-import com.google.common.collect.Lists;
 
 public class FlinkHiveIcebergWriter {
 
   public static void main(String[] args) throws Exception {
 
-    System.setProperty("HADOOP_USER_NAME", "hdfs");
+    System.setProperty("HADOOP_USER_NAME", "root");
 
     StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
     env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
@@ -37,13 +37,13 @@ public class FlinkHiveIcebergWriter {
     Catalog catalog = new HiveCatalog(conf);
 
     // iceberg table identification.
-    TableIdentifier name = TableIdentifier.of("default", "iceberg-tb");
+    TableIdentifier name = TableIdentifier.of("default", "iceberg-hive-tb");
 
     // iceberg table schema identification.
     Schema schema = new Schema(Types.NestedField.required(1, "id", Types.IntegerType.get()),
         Types.NestedField.optional(2, "name", Types.StringType.get()),
         Types.NestedField.required(3, "age", Types.IntegerType.get()),
-        Types.NestedField.optional(4, "ts", Types.TimestampType.withZone()));
+        Types.NestedField.optional(4, "ts", Types.TimestampType.withoutZone()));
 
     // iceberg table partition identification.
     PartitionSpec spec = PartitionSpec.builderFor(schema).year("ts").bucket("id", 2).build();
@@ -61,9 +61,11 @@ public class FlinkHiveIcebergWriter {
       @Override
       public void run(SourceContext<RowData> ctx) throws Exception {
         while (flag) {
-          GenericRowData row = new GenericRowData(2);
-          row.setField(0, System.currentTimeMillis());
-          row.setField(1, UUID.randomUUID().toString());
+          GenericRowData row = new GenericRowData(4);
+          row.setField(0, new Random().nextInt());
+          row.setField(1, StringData.fromBytes(UUID.randomUUID().toString().getBytes()));
+          row.setField(2, new Random().nextInt());
+          row.setField(3, TimestampData.fromEpochMillis(System.currentTimeMillis() - new Random().nextInt()));
           ctx.collect(row);
         }
       }

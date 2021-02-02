@@ -39,7 +39,7 @@
               </filters>
               <transformers>
                 <transformer>
-                  <mainClass>com.coomia.datalake.writer.FlinkIcebergHadoopSink</mainClass>
+                  <mainClass>com.coomia.datalake.hive.FlinkHiveIcebergWriter</mainClass>
                 </transformer>
               </transformers>
             </configuration>
@@ -110,94 +110,6 @@
       <artifactId>flink-connector-hive_2.12</artifactId>
       <version>1.11.3</version>
       <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.hive</groupId>
-      <artifactId>hive-exec</artifactId>
-      <version>3.1.2</version>
-      <scope>provided</scope>
-      <exclusions>
-        <exclusion>
-          <artifactId>orc-core</artifactId>
-          <groupId>org.apache.orc</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>hive-vector-code-gen</artifactId>
-          <groupId>org.apache.hive</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>hive-llap-tez</artifactId>
-          <groupId>org.apache.hive</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>hive-shims</artifactId>
-          <groupId>org.apache.hive</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>log4j-1.2-api</artifactId>
-          <groupId>org.apache.logging.log4j</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>log4j-slf4j-impl</artifactId>
-          <groupId>org.apache.logging.log4j</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>antlr-runtime</artifactId>
-          <groupId>org.antlr</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>ST4</artifactId>
-          <groupId>org.antlr</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>ant</artifactId>
-          <groupId>org.apache.ant</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>libfb303</artifactId>
-          <groupId>org.apache.thrift</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>hadoop-yarn-registry</artifactId>
-          <groupId>org.apache.hadoop</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>ivy</artifactId>
-          <groupId>org.apache.ivy</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>apache-curator</artifactId>
-          <groupId>org.apache.curator</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>groovy-all</artifactId>
-          <groupId>org.codehaus.groovy</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>datanucleus-core</artifactId>
-          <groupId>org.datanucleus</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>calcite-core</artifactId>
-          <groupId>org.apache.calcite</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>calcite-druid</artifactId>
-          <groupId>org.apache.calcite</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>avatica</artifactId>
-          <groupId>org.apache.calcite.avatica</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>stax-api</artifactId>
-          <groupId>stax</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>hive-upgrade-acid</artifactId>
-          <groupId>org.apache.hive</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.apache.flink</groupId>
