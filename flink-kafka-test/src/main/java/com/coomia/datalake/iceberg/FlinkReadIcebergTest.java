@@ -3,6 +3,7 @@ package com.coomia.datalake.iceberg;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.flink.api.common.functions.MapFunction;
+import org.apache.flink.api.java.utils.MultipleParameterTool;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -17,9 +18,15 @@ import com.coomia.datalake.es.ElasticsearchSinkFunctionWithConf;
 public class FlinkReadIcebergTest {
 
   public static void main(String[] args) throws Exception {
+    MultipleParameterTool params = MultipleParameterTool.fromArgs(args);
     StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-    TableLoader tableLoader =
-        TableLoader.fromHadoopTable("hdfs://namenode:9000/iceberg/warehouse/default/iceberg-tb");
+    env.getConfig().setGlobalJobParameters(params);
+
+    String tableNameString = "iceberg-tb";
+    if (params.has("table"))
+      tableNameString = params.get("table");
+    TableLoader tableLoader = TableLoader
+        .fromHadoopTable("hdfs://namenode:9000/iceberg/warehouse/default/" + tableNameString);
     DataStream<RowData> batch = FlinkSource.forRowData().env(env).tableLoader(tableLoader).build();
 
     SingleOutputStreamOperator<String> dataStream = batch.map(new MapFunction<RowData, String>() {
@@ -38,12 +45,10 @@ public class FlinkReadIcebergTest {
       }
     });
 
-    String topic = "arkevent";
-
     List<HttpHost> httpHosts = new ArrayList<>();
     httpHosts.add(new HttpHost("elasticsearch", 9200, "http"));
     ElasticsearchSink.Builder<String> esSinkBuilder = new ElasticsearchSink.Builder<>(httpHosts,
-        new ElasticsearchSinkFunctionWithConf(topic, topic));
+        new ElasticsearchSinkFunctionWithConf(tableNameString, tableNameString));
     esSinkBuilder.setBulkFlushMaxActions(1);
 
     dataStream.uid("iceberg-consumer");
