@@ -69,7 +69,7 @@ public class FlinkWriteIcebergTest {
           @Override
           public RowData map(String value) throws Exception {
             JSONObject dataJson = JSON.parseObject(value);
-            GenericRowData row = new GenericRowData(2);
+            GenericRowData row = new GenericRowData(5);
             row.setField(0, StringData.fromBytes(dataJson.getString("uid").getBytes()));
             row.setField(1, dataJson.getLong("eventTime"));
             row.setField(2, StringData.fromBytes(dataJson.getString("eventid").getBytes()));
