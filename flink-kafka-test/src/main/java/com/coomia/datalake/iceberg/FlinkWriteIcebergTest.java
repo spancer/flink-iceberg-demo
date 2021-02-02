@@ -1,7 +1,9 @@
 package com.coomia.datalake.iceberg;
 
+import java.util.Map;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
+import org.apache.flink.calcite.shaded.com.google.common.collect.ImmutableMap;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -11,9 +13,11 @@ import org.apache.flink.table.data.RowData;
 import org.apache.flink.table.data.StringData;
 import org.apache.flink.table.data.TimestampData;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.iceberg.FileFormat;
 import org.apache.iceberg.PartitionSpec;
 import org.apache.iceberg.Schema;
 import org.apache.iceberg.Table;
+import org.apache.iceberg.TableProperties;
 import org.apache.iceberg.catalog.Catalog;
 import org.apache.iceberg.catalog.TableIdentifier;
 import org.apache.iceberg.flink.TableLoader;
@@ -38,21 +42,27 @@ public class FlinkWriteIcebergTest {
     Catalog catalog = new HadoopCatalog(conf);
 
     // iceberg table identification.
-    TableIdentifier name = TableIdentifier.of("default", "iceberg-tb");
+    TableIdentifier name =
+        TableIdentifier.of("default", "iceberg-tb-" + System.currentTimeMillis());
 
     // iceberg table schema identification.
     Schema schema = new Schema(Types.NestedField.required(1, "uid", Types.StringType.get()),
         Types.NestedField.required(2, "eventTime", Types.LongType.get()),
         Types.NestedField.required(3, "eventid", Types.StringType.get()),
         Types.NestedField.optional(4, "uuid", Types.StringType.get()));
-        Types.NestedField.required(5, "ts", Types.TimestampType.withoutZone());
+    Types.NestedField.required(5, "ts", Types.TimestampType.withoutZone());
 
 
     // iceberg table partition identification.
-    PartitionSpec spec = PartitionSpec.builderFor(schema).bucket("uid", 5).build();
+    // PartitionSpec spec = PartitionSpec.builderFor(schema).bucket("uid", 5).build();
+
+    PartitionSpec spec = PartitionSpec.unpartitioned();
+    // identify using orc format as storage.
+    Map<String, String> props =
+        ImmutableMap.of(TableProperties.DEFAULT_FILE_FORMAT, FileFormat.ORC.name());
 
     // create an iceberg table.
-    Table table = catalog.createTable(name, schema, spec);
+    Table table = catalog.createTable(name, schema, spec, props);
 
 
 
@@ -61,7 +71,7 @@ public class FlinkWriteIcebergTest {
 
     FlinkKafkaConsumer<String> consumer = new FlinkKafkaConsumer<String>(topic,
         new SimpleStringSchema(), KafkaUtils.consumeProps(servers, "flink-consumer"));
-    consumer.setStartFromLatest();
+    consumer.setStartFromEarliest();
 
     SingleOutputStreamOperator<RowData> dataStream =
         env.addSource(consumer).map(new MapFunction<String, RowData>() {
