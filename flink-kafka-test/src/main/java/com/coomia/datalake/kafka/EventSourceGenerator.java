@@ -23,10 +23,6 @@ public class EventSourceGenerator extends RichParallelSourceFunction<String> {
     this.dpv = dpv;
     this.maxUid = maxUid;
   }
-  
-  public EventSourceGenerator(int maxUid) {
-    this.maxUid = maxUid;
-  }
 
   @Override
   public void run(SourceContext<String> ctx) throws Exception {
