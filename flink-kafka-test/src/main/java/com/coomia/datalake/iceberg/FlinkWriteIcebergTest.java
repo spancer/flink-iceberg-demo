@@ -8,6 +8,8 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 import org.apache.flink.table.data.GenericRowData;
 import org.apache.flink.table.data.RowData;
+import org.apache.flink.table.data.StringData;
+import org.apache.flink.table.data.TimestampData;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.iceberg.PartitionSpec;
 import org.apache.iceberg.Schema;
@@ -68,11 +70,11 @@ public class FlinkWriteIcebergTest {
           public RowData map(String value) throws Exception {
             JSONObject dataJson = JSON.parseObject(value);
             GenericRowData row = new GenericRowData(2);
-            row.setField(0, dataJson.getString("uid"));
+            row.setField(0, StringData.fromBytes(dataJson.getString("uid").getBytes()));
             row.setField(1, dataJson.getLong("eventTime"));
-            row.setField(2, dataJson.getString("eventid"));
-            row.setField(3, dataJson.getString("uuid"));
-            row.setField(4, dataJson.getLong("eventTime") * 1000); // milliseconds to microseconds
+            row.setField(2, StringData.fromBytes(dataJson.getString("eventid").getBytes()));
+            row.setField(3, StringData.fromBytes(dataJson.getString("uuid").getBytes()));
+            row.setField(4, TimestampData.fromEpochMillis(dataJson.getLong("eventTime")));
             return row;
           }
 
