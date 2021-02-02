@@ -25,7 +25,7 @@ public class FlinkHiveIcebergWriter {
 
   public static void main(String[] args) throws Exception {
 
-    System.setProperty("HADOOP_USER_NAME", "root");
+    //System.setProperty("HADOOP_USER_NAME", "root");
 
     StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
     env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
@@ -82,7 +82,7 @@ public class FlinkHiveIcebergWriter {
         .build();
 
     // Execute the program.
-    env.execute("Test Iceberg DataStream");
+    env.execute("flink Iceberg hive catalog sink");
 
 
   }
