@@ -1,13 +1,18 @@
 package com.coomia.datalake.benchmark;
 
+import java.util.Map;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.*;
+import org.apache.hadoop.hbase.client.Admin;
+import org.apache.hadoop.hbase.client.ColumnFamilyDescriptorBuilder;
+import org.apache.hadoop.hbase.client.Connection;
+import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.Put;
+import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.client.TableDescriptorBuilder;
 import org.apache.hadoop.hbase.util.Bytes;
-
-import java.util.Map;
 
 /**
  * Hbase sink
@@ -17,18 +22,18 @@ public class FlinkHbaseSink extends RichSinkFunction<Map<String, Object>> {
   private String zkQuorum = "zookeeper";
   private String zkPort = "2181";
   private int hbasePort = 6000;
-  private TableName hbaseTableName;
+  private String hbaseTableName;
   private String columnFamily = "cf";
   private Connection connection;
   private Admin admin;
   private Table table;
 
-  public FlinkHbaseSink(HBaseConfig hbaseConfig) {
-    this.zkQuorum = hbaseConfig.getZkHost();
-    this.zkPort = hbaseConfig.getZkPort();
-    this.hbaseTableName = TableName.valueOf(hbaseConfig.getTable());
-    this.columnFamily = hbaseConfig.getCf();
-    this.hbasePort = hbaseConfig.getHbasePort();
+  public FlinkHbaseSink(String zkHost, String zkPort, String hbaseTableName, String cf, Integer hbasePort) {
+    this.zkQuorum = zkHost;
+    this.zkPort = zkPort;
+    this.hbaseTableName = hbaseTableName;
+    this.columnFamily = cf;
+    this.hbasePort = hbasePort;
   }
 
 
@@ -44,12 +49,13 @@ public class FlinkHbaseSink extends RichSinkFunction<Map<String, Object>> {
     config.setInt("hbase.client.scanner.timeout.period", 200000);
     connection = ConnectionFactory.createConnection(config);
     admin = connection.getAdmin();
-    boolean tableExists = admin.tableExists(hbaseTableName);
+    TableName tableName = TableName.valueOf(hbaseTableName);
+    boolean tableExists = admin.tableExists(tableName);
     if (!tableExists) {
-      admin.createTable(TableDescriptorBuilder.newBuilder((hbaseTableName))
+      admin.createTable(TableDescriptorBuilder.newBuilder((tableName))
           .setColumnFamily(ColumnFamilyDescriptorBuilder.of(columnFamily)).build());
     }
-    table = connection.getTable(hbaseTableName);
+    table = connection.getTable(tableName);
   }
 
   @Override

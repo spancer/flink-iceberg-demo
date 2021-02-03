@@ -44,7 +44,7 @@ public class BDPBenchmarkJob {
     int partitionNum = 3;
     short replicas = 1;
     String servers = "kafka:9092";
-    
+
     if (params.has("topic"))
       topic = params.get("topic");
     if (params.has("partition"))
@@ -70,8 +70,8 @@ public class BDPBenchmarkJob {
       cf = params.get("cf");
 
     // create kafka topic if not exists.
-    //in kafka2.5 using admin
-   // Admin admin = Admin.create(KafkaUtils.producerProps(servers));
+    // in kafka2.5 using admin
+    // Admin admin = Admin.create(KafkaUtils.producerProps(servers));
     AdminClient kafkAdminClient = AdminClient.create(KafkaUtils.producerProps(servers));
     NewTopic newTopic = new NewTopic(servers, partitionNum, replicas);
     if (!new ArrayList<String>(kafkAdminClient.listTopics().names().get()).contains(topic))
@@ -123,12 +123,6 @@ public class BDPBenchmarkJob {
      * sink data to HBase
      */
 
-    HBaseConfig hBaseConfig = new HBaseConfig();
-    hBaseConfig.setZkHost(zkHost);
-    hBaseConfig.setZkPort(zkPort);
-    hBaseConfig.setHbasePort(hMasterPort);
-    hBaseConfig.setTable(topic);
-    hBaseConfig.setCf(cf);
 
     dataStream.map(new MapFunction<String, Map<String, Object>>() {
 
@@ -137,7 +131,7 @@ public class BDPBenchmarkJob {
         return JSONObject.parseObject(value).getInnerMap();
       }
 
-    }).addSink(new FlinkHbaseSink(hBaseConfig));
+    }).addSink(new FlinkHbaseSink(zkHost, zkPort, topic, cf, hMasterPort));
 
     env.execute("flink-consumer-demo");
   }
