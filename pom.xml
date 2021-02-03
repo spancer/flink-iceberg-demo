@@ -246,8 +246,8 @@
 				<artifactId>lombok</artifactId>
 				<version>1.18.8</version>
 			</dependency>
-			
-			
+
+
 			<!-- es -->
 			<dependency>
 				<groupId>org.apache.flink</groupId>
@@ -278,6 +278,19 @@
 				<groupId>org.elasticsearch.client</groupId>
 				<artifactId>elasticsearch-rest-high-level-client</artifactId>
 				<version>${elasticsearch.version}</version>
+			</dependency>
+
+
+			<dependency>
+				<groupId>org.apache.flink</groupId>
+				<artifactId>flink-hadoop-compatibility_${scala.binary.version}</artifactId>
+				<version>${flink.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.flink</groupId>
+				<artifactId>flink-connector-filesystem_${scala.binary.version}</artifactId>
+				<version>${flink.version}</version>
 			</dependency>
 
 		</dependencies>
@@ -380,5 +393,7 @@
 		<module>flink-hive-test</module>
 		<module>flink-kafka-test</module>
 		<module>iceberg-java-test</module>
+		<module>iceberg-test</module>
+		<module>bdp-benchmark-test</module>
 	</modules>
 </project>

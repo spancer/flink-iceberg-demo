@@ -4,7 +4,9 @@ import java.util.Map;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.calcite.shaded.com.google.common.collect.ImmutableMap;
+import org.apache.flink.core.fs.FileSystem.WriteMode;
 import org.apache.flink.streaming.api.TimeCharacteristic;
+import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
@@ -22,6 +24,7 @@ import org.apache.iceberg.catalog.Catalog;
 import org.apache.iceberg.catalog.TableIdentifier;
 import org.apache.iceberg.flink.TableLoader;
 import org.apache.iceberg.flink.sink.FlinkSink;
+import org.apache.iceberg.flink.source.FlinkSource;
 import org.apache.iceberg.hadoop.HadoopCatalog;
 import org.apache.iceberg.types.Types;
 import com.alibaba.fastjson.JSON;
@@ -50,7 +53,7 @@ public class FlinkWriteIcebergTest {
         Types.NestedField.required(2, "eventTime", Types.LongType.get()),
         Types.NestedField.required(3, "eventid", Types.StringType.get()),
         Types.NestedField.optional(4, "uuid", Types.StringType.get()));
-    Types.NestedField.required(5, "ts", Types.TimestampType.withoutZone());
+        Types.NestedField.required(5, "ts", Types.TimestampType.withoutZone());
 
 
     // iceberg table partition identification.
@@ -99,6 +102,12 @@ public class FlinkWriteIcebergTest {
     // sink data to iceberg table
     FlinkSink.forRowData(dataStream).table(table).tableLoader(tableLoader).writeParallelism(1)
         .build();
+    
+    
+    //read and write to file.
+    DataStream<RowData> batchData = FlinkSource.forRowData().env(env).tableLoader(tableLoader).build();
+    batchData.print();
+    batchData.writeAsCsv(tableLoader.loadTable().location().concat("/out/out.csv"), WriteMode.OVERWRITE, "\n", " ");
 
     // Execute the program.
     env.execute("Test Iceberg DataStream");

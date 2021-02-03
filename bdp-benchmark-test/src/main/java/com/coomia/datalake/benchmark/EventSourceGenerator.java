@@ -1,0 +1,42 @@
+package com.coomia.datalake.benchmark;
+
+import org.apache.flink.streaming.api.functions.source.RichParallelSourceFunction;
+import com.alibaba.fastjson.JSON;
+
+/**
+ * using rich source function to generate event data.
+ * 
+ * @author spancer
+ * @date 2019/03/19
+ * 
+ */
+public class EventSourceGenerator extends RichParallelSourceFunction<String> {
+
+  private static final long serialVersionUID = -3345711794203267205L;
+  private long dpv = 1-000-000-000;
+  private int maxUid;
+
+  /**
+   * 
+   */
+  public EventSourceGenerator(long dpv, int maxUid) {
+    this.dpv = dpv;
+    this.maxUid = maxUid;
+  }
+
+  @Override
+  public void run(SourceContext<String> ctx) throws Exception {
+    while (dpv > 0) {
+      ctx.collect(JSON.toJSONString(RandomEventDataUtil.randomRecord(maxUid)));
+      dpv--;
+    }
+
+  }
+
+  @Override
+  public void cancel() {
+    dpv = 0;
+
+  }
+
+}
