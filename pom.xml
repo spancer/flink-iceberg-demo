@@ -12,7 +12,7 @@
 		<hive.version>3.1.2</hive.version>
 		<hadoop.version>3.2.1</hadoop.version>
 		<iceberg.version>0.10.0</iceberg.version>
-		<kafka.version>2.5.0</kafka.version>
+		<kafka.version>2.0.0</kafka.version>
 		<elasticsearch.version>7.9.1</elasticsearch.version>
 		<scala.binary.version>2.12</scala.binary.version>
 		<maven.compiler.source>1.8</maven.compiler.source>
