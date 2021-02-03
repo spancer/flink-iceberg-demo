@@ -37,7 +37,7 @@ public class BDPBenchmarkJob {
     String path = "hdfs://namenode:9000/hdfs";
     String zkHost = "zookeeper";
     String zkPort = "2181";
-    int hMasterPort = 6000;
+    String hbaseMaster = "hbase-master:16000";
     String cf = "cf";
 
     int esPort = 9200;
@@ -64,8 +64,8 @@ public class BDPBenchmarkJob {
     if (params.has("zkPort"))
       zkPort = params.get("zkPort");
 
-    if (params.has("hMasterPort"))
-      hMasterPort = params.getInt("hMasterPort");
+    if (params.has("hbaseMaster"))
+      hbaseMaster = params.get("hbaseMaster");
     if (params.has("cf"))
       cf = params.get("cf");
 
@@ -129,7 +129,7 @@ public class BDPBenchmarkJob {
         return JSONObject.parseObject(value).getInnerMap();
       }
 
-    }).addSink(new FlinkHbaseSink(zkHost, zkPort, topic, cf, hMasterPort));
+    }).addSink(new FlinkHbaseSink(zkHost, zkPort, hbaseMaster, topic, cf));
 
     env.execute("flink-consumer-demo");
   }

@@ -21,19 +21,19 @@ public class FlinkHbaseSink extends RichSinkFunction<Map<String, Object>> {
   private static final long serialVersionUID = 727797000700012640L;
   private String zkQuorum = "zookeeper";
   private String zkPort = "2181";
-  private int hbasePort = 6000;
   private String hbaseTableName;
+  private String hbaseMaster;
   private String columnFamily = "cf";
   private Connection connection;
   private Admin admin;
   private Table table;
 
-  public FlinkHbaseSink(String zkHost, String zkPort, String hbaseTableName, String cf, Integer hbasePort) {
+  public FlinkHbaseSink(String zkHost, String zkPort, String hbaseMaster, String hbaseTableName, String cf) {
     this.zkQuorum = zkHost;
     this.zkPort = zkPort;
+    this.hbaseMaster = hbaseMaster;
     this.hbaseTableName = hbaseTableName;
     this.columnFamily = cf;
-    this.hbasePort = hbasePort;
   }
 
 
@@ -42,7 +42,7 @@ public class FlinkHbaseSink extends RichSinkFunction<Map<String, Object>> {
     super.open(parameters);
     org.apache.hadoop.conf.Configuration config = HBaseConfiguration.create();
     config.set("hbase.zookeeper.quorum", zkQuorum);
-    config.set("hbase.master", zkQuorum + ":" + hbasePort);
+    config.set("hbase.master", hbaseMaster);
     config.set("hbase.zookeeper.property.clientPort", zkPort);
     config.setInt("hbase.rpc.timeout", 20000);
     config.setInt("hbase.client.operation.timeout", 30000);
