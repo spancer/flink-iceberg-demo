@@ -47,6 +47,7 @@ public class FlinkHbaseSink extends RichSinkFunction<Map<String, Object>> {
     config.setInt("hbase.rpc.timeout", 20000);
     config.setInt("hbase.client.operation.timeout", 30000);
     config.setInt("hbase.client.scanner.timeout.period", 200000);
+    //config.set("zookeeper.znode.parent", "/hbase");
     config.set("zookeeper.znode.parent", "/hbase-unsecure");
     connection = ConnectionFactory.createConnection(config);
     
