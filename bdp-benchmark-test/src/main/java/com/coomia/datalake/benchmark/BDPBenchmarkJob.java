@@ -70,8 +70,6 @@ public class BDPBenchmarkJob {
       cf = params.get("cf");
 
     // create kafka topic if not exists.
-    // in kafka2.5 using admin
-    // Admin admin = Admin.create(KafkaUtils.producerProps(servers));
     AdminClient kafkAdminClient = AdminClient.create(KafkaUtils.producerProps(servers));
     NewTopic newTopic = new NewTopic(servers, partitionNum, replicas);
     if (!new ArrayList<String>(kafkAdminClient.listTopics().names().get()).contains(topic))
