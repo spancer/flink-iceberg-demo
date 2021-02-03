@@ -31,6 +31,7 @@ public class BDPBenchmarkJob {
 
   public static void main(String[] args) throws Exception {
     // get kafka envs from args.
+    System.setProperty("HADOOP_USER_NAME", "hdfs");
     MultipleParameterTool params = MultipleParameterTool.fromArgs(args);
     String topic = "arkevent";
     String esHost = "elasticsearch";
