@@ -81,7 +81,7 @@ public class FlinkHbaseSink extends RichSinkFunction<Map<String, Object>> {
     for (Map.Entry<String, Object> entry : value.entrySet()) {
       String field = entry.getKey();
       put.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes(field),
-          Bytes.toBytes((String) entry.getValue()));
+          Bytes.toBytes(entry.getValue().toString()));
     }
     table.put(put);
 
