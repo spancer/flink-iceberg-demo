@@ -9,6 +9,7 @@ import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.serialization.SimpleStringEncoder;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.api.java.utils.MultipleParameterTool;
+import org.apache.flink.calcite.shaded.com.google.common.collect.ImmutableMap;
 import org.apache.flink.core.fs.Path;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
@@ -73,6 +74,11 @@ public class BDPBenchmarkJob {
     // create kafka topic if not exists.
     AdminClient kafkAdminClient = AdminClient.create(KafkaUtils.producerProps(servers));
     NewTopic newTopic = new NewTopic(servers, partitionNum, replicas);
+    //need to set configs, otherwise, the partition and replicas doesn't take effect.
+    newTopic.configs(new ImmutableMap.Builder<String, String>().put("cleanup.policy","delete").
+        put("retention.ms",Long.toString(86400000L)).
+        put("retention.bytes","-1").
+        build()); 
     if (!new ArrayList<String>(kafkAdminClient.listTopics().names().get()).contains(topic))
       kafkAdminClient.createTopics(new ImmutableList.Builder<NewTopic>().add(newTopic).build());
     kafkAdminClient.close();
