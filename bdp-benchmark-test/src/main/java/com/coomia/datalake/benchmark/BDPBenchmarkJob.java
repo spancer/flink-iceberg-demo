@@ -73,8 +73,7 @@ public class BDPBenchmarkJob {
 
     // create kafka topic if not exists.
     AdminClient kafkAdminClient = AdminClient.create(KafkaUtils.producerProps(servers));
-    NewTopic newTopic = new NewTopic(servers, partitionNum, replicas);
-    //need to set configs, otherwise, the partition and replicas doesn't take effect.
+    NewTopic newTopic = new NewTopic(topic, partitionNum, replicas);
     newTopic.configs(new ImmutableMap.Builder<String, String>().put("cleanup.policy","delete").
         put("retention.ms",Long.toString(86400000L)).
         put("retention.bytes","-1").
