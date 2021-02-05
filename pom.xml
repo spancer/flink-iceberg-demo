@@ -11,7 +11,7 @@
 		<flink.version>1.11.3</flink.version>
 		<hive.version>3.1.2</hive.version>
 		<hadoop.version>3.2.1</hadoop.version>
-		<iceberg.version>0.10.0</iceberg.version>
+		<iceberg.version>0.11.0</iceberg.version>
 		<kafka.version>2.0.0</kafka.version>
 		<elasticsearch.version>7.9.1</elasticsearch.version>
 		<scala.binary.version>2.12</scala.binary.version>

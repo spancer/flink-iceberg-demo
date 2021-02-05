@@ -101,6 +101,7 @@ public class FlinkWriteIcebergTest {
 
     // sink data to iceberg table
     FlinkSink.forRowData(dataStream).table(table).tableLoader(tableLoader).writeParallelism(1)
+        .overwrite(true)
         .build();
     
     
