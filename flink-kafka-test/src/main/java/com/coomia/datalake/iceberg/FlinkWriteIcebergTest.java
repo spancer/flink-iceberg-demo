@@ -34,7 +34,7 @@ import com.coomia.datalake.kafka.KafkaUtils;
 public class FlinkWriteIcebergTest {
 
   public static void main(String[] args) throws Exception {
-
+    System.setProperty("HADOOP_USER_NAME", "root");
     StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
     env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
     env.getConfig().setAutoWatermarkInterval(5000L);

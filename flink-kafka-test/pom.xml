@@ -96,7 +96,7 @@
 			<groupId>org.apache.iceberg</groupId>
 			<artifactId>iceberg-flink</artifactId>
 		</dependency>
-		
+
 		<!-- added table api -->
 		<dependency>
 			<groupId>org.apache.flink</groupId>
@@ -110,7 +110,7 @@
 			<artifactId>flink-table-planner-blink_${scala.binary.version}</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		
+
 	</dependencies>
 
 	<build>

@@ -11,7 +11,7 @@
 
 	<dependencies>
 
-	<!-- added hdfs & iceberg -->
+		<!-- added hdfs & iceberg -->
 		<!-- mapreduce -->
 		<dependency>
 			<groupId>org.apache.hadoop</groupId>
@@ -55,7 +55,7 @@
 			<groupId>org.apache.iceberg</groupId>
 			<artifactId>iceberg-flink</artifactId>
 		</dependency>
-		
+
 		<!-- added table api -->
 		<dependency>
 			<groupId>org.apache.flink</groupId>
