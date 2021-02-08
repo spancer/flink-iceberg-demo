@@ -1,5 +1,5 @@
 /*
- *   Copyright (c) 2015-2020 Coomia Network Technology Co., Ltd. All Rights Reserved.
+ *   Copyright (c) 2015-2021 Coomia Network Technology Co., Ltd. All Rights Reserved.
  *  
  *   <p>
  *   This software is licensed not sold. Use or reproduction of this software by any unauthorized individual or entity is strictly prohibited. This software is the confidential and proprietary information of Coomia Network Technology Co., Ltd. Disclosure of such confidential information  and shall use it only in accordance with the terms of the license agreement you entered into with Coomia Network Technology Co., Ltd.
