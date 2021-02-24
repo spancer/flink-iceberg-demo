@@ -45,7 +45,7 @@
 	</property>
 	<property>
 		<name>yarn.app.mapreduce.am.env</name>
-		<value>HADOOP_MAPRED_HOME=/opt/hadoop-3.2.1/</value>
+		<value>HADOOP_MAPRED_HOME=/opt/hadoop-3.1.4/</value>
 	</property>
 	<property>
 		<name>mapreduce.map.memory.mb</name>
@@ -57,7 +57,7 @@
 	</property>
 	<property>
 		<name>mapreduce.reduce.env</name>
-		<value>HADOOP_MAPRED_HOME=/opt/hadoop-3.2.1/</value>
+		<value>HADOOP_MAPRED_HOME=/opt/hadoop-3.1.4/</value>
 	</property>
 	<property>
 		<name>mapreduce.framework.name</name>
@@ -65,7 +65,7 @@
 	</property>
 	<property>
 		<name>mapreduce.map.env</name>
-		<value>HADOOP_MAPRED_HOME=/opt/hadoop-3.2.1/</value>
+		<value>HADOOP_MAPRED_HOME=/opt/hadoop-3.1.4/</value>
 	</property>
 	<property>
 		<name>yarn.nodemanager.bind-host</name>
