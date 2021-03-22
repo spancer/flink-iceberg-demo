@@ -13,7 +13,7 @@ Testing flink jobs on yarn, jobs integrated with iceberg, hive, hbase, kafka, el
 
 ## How to Run
 
-* Deploy a testing big data platform using docker-compose. [Download here](https://github.com/spancer/bigdata-docker-compose/tree/flink-yarn)
+* Deploy a testing big data platform using docker-compose. [Download here](https://github.com/spancer/bigdata-docker-compose)
 
 * Build each jobs and run it on yarn with yarn session or pre-job. 
 
