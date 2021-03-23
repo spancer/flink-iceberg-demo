@@ -77,14 +77,14 @@
 		<dependency>
 			<groupId>org.apache.flink</groupId>
 			<artifactId>flink-table-planner_${scala.binary.version}</artifactId>
-			<scope>provided</scope>
+			 <scope>${dependency-scope}</scope>
 		</dependency>
 
 
 		<dependency>
 			<groupId>org.apache.flink</groupId>
 			<artifactId>flink-table-planner-blink_${scala.binary.version}</artifactId>
-			<scope>provided</scope>
+			 <scope>${dependency-scope}</scope>
 		</dependency>
 	</dependencies>
 	<build>

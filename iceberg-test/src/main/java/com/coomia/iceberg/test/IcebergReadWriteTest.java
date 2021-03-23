@@ -1,22 +1,21 @@
-/*******************************************************************************
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
+/**
+ * ***************************************************************************** Licensed to the
+ * Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE
+ * file distributed with this work for additional information regarding copyright ownership. The ASF
+ * licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use
+ * this file except in compliance with the License. You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * <p>http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
+ * <p>Unless required by applicable law or agreed to in writing, software distributed under the
+ * License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ * *****************************************************************************
+ */
 package com.coomia.iceberg.test;
 
+import com.google.common.collect.ImmutableMap;
 import java.util.Map;
 import java.util.UUID;
 import org.apache.flink.core.fs.FileSystem.WriteMode;
@@ -37,40 +36,42 @@ import org.apache.iceberg.flink.sink.FlinkSink;
 import org.apache.iceberg.flink.source.FlinkSource;
 import org.apache.iceberg.hadoop.HadoopTables;
 import org.apache.iceberg.types.Types;
-import com.google.common.collect.ImmutableMap;
 
 public class IcebergReadWriteTest {
 
   public static void main(String[] args) throws Exception {
+    System.setProperty("HADOOP_USER_NAME", "root");
     StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
     env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
     env.getConfig().setAutoWatermarkInterval(5000L);
     env.setParallelism(1);
+    DataStream<RowData> inputStream =
+        env.addSource(
+            new RichSourceFunction<RowData>() {
 
-    DataStream<RowData> inputStream = env.addSource(new RichSourceFunction<RowData>() {
+              private static final long serialVersionUID = 1L;
+              boolean flag = true;
 
-      private static final long serialVersionUID = 1L;
-      boolean flag = true;
+              @Override
+              public void run(SourceContext<RowData> ctx) throws Exception {
+                while (flag) {
+                  GenericRowData row = new GenericRowData(2);
+                  row.setField(0, System.currentTimeMillis());
+                  row.setField(1, StringData.fromString(UUID.randomUUID().toString()));
+                  ctx.collect(row);
+                }
+              }
 
-      @Override
-      public void run(SourceContext<RowData> ctx) throws Exception {
-        while (flag) {
-          GenericRowData row = new GenericRowData(2);
-          row.setField(0, System.currentTimeMillis());
-          row.setField(1, StringData.fromString(UUID.randomUUID().toString()));
-          ctx.collect(row);
-        }
-
-      }
-
-      @Override
-      public void cancel() {
-        flag = false;
-      }
-    });
+              @Override
+              public void cancel() {
+                flag = false;
+              }
+            });
     // define iceberg table schema.
-    Schema schema = new Schema(Types.NestedField.optional(1, "id", Types.LongType.get()),
-        Types.NestedField.optional(2, "data", Types.StringType.get()));
+    Schema schema =
+        new Schema(
+            Types.NestedField.optional(1, "id", Types.LongType.get()),
+            Types.NestedField.optional(2, "data", Types.StringType.get()));
     // define iceberg partition specification.
     PartitionSpec spec = PartitionSpec.unpartitioned();
 
@@ -88,15 +89,17 @@ public class IcebergReadWriteTest {
 
     TableLoader tableLoader = TableLoader.fromHadoopTable(tablePath);
 
-    FlinkSink.forRowData(inputStream).table(table).tableLoader(tableLoader).writeParallelism(1)
+    FlinkSink.forRowData(inputStream)
+        .table(table)
+        .tableLoader(tableLoader)
+        .writeParallelism(1)
         .build();
-    
-    //read and write to file.
-    DataStream<RowData> batchData = FlinkSource.forRowData().env(env).tableLoader(tableLoader).build();
+
+    // read and write to file.
+    DataStream<RowData> batchData =
+        FlinkSource.forRowData().env(env).tableLoader(tableLoader).build();
     batchData.print();
     batchData.writeAsCsv(basePath.concat("out"), WriteMode.OVERWRITE, "\n", " ");
     env.execute("iceberg write and read.");
-    
   }
-
 }

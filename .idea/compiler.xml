@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="flink-iceberg-demo (1)" />
+        <module name="flink-kafka-test" />
+        <module name="flink-hive-test" />
+        <module name="bdp-benchmark-test" />
+        <module name="iceberg-test" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="flink-iceberg-demo (2)" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="bdp-benchmark-test" options="-Xpkginfo:always" />
+      <module name="flink-hive-test" options="-Xpkginfo:always" />
+      <module name="flink-iceberg-demo (2)" options="-Xpkginfo:always" />
+      <module name="flink-kafka-test" options="-Xpkginfo:always" />
+      <module name="iceberg-test" options="-Xpkginfo:always" />
+    </option>
+  </component>
+</project>
